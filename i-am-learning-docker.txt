@@ -1,0 +1,229 @@
+https://docs.docker.com/engine/install/centos/
+
+
+
+Uninstall old versions,
+
+[anup@c7-80-docker ~]$  sudo yum remove docker \
+>                   docker-client \
+>                   docker-client-latest \
+>                   docker-common \
+>                   docker-latest \
+>                   docker-latest-logrotate \
+>                   docker-logrotate \
+>                   docker-engine
+
+
+
+
+Install using the repository,
+
+Set up the repository,
+
+[anup@c7-80-docker ~]$ sudo yum install -y yum-utils
+
+[anup@c7-80-docker ~]$ sudo yum-config-manager \
+>     --add-repo \
+>     https://download.docker.com/linux/centos/docker-ce.repo
+
+[anup@c7-80-docker ~]$ sudo yum-config-manager --enable docker-ce-nightly
+
+[anup@c7-80-docker ~]$ sudo yum-config-manager --enable docker-ce-test
+
+
+
+
+Install Docker Engine,
+
+[anup@c7-80-docker ~]$ sudo yum install docker-ce docker-ce-cli containerd.io
+
+[anup@c7-80-docker ~]$ docker version
+
+[anup@c7-80-docker ~]$ docker --version
+
+
+
+
+[anup@c7-80-docker ~]$ sudo systemctl status docker.service 
+
+[anup@c7-80-docker ~]$ sudo systemctl start docker.service 
+
+
+
+
+
+PS C:\Users\uniqs> wsl -l -v
+
+
+
+Questions - 
+
+Working with docker volumes ?
+Working with docker in vscode ?
+
+
+
+PS C:\Users\uniqs> docker info
+PS C:\Users\uniqs> docker images
+PS C:\Users\uniqs> docker version
+PS C:\Users\uniqs> docker --version
+
+
+PS C:\Users\uniqs> docker run hello-world
+
+
+
+
+[anup@c7-80-docker ~]$ sudo docker info
+[anup@c7-80-docker ~]$ sudo docker images
+[anup@c7-80-docker ~]$ sudo docker ps -a
+[anup@c7-80-docker ~]$ sudo docker run hello-world
+
+
+[anup@c7-80-docker ~]$ sudo docker pull ubuntu
+[root@c7-80-docker ~]# docker images
+
+
+docker create hello-world
+docker start -a f3a38a317fdb21be3548ad13f61ac2209acdf0ba2a16b5d0b640e73f580eef27
+docker start
+docker attach (-a)
+docker run , (create+start)
+docker exec -i -t 60da1cdc8568 sh
+docker commit 77659eb9808b ubuntu-image
+docker diff
+docker logs 71855f674398
+docker stop
+docker kill
+docker image rm
+docker rm
+dockerfile
+docker port echo-server 
+
+
+
+
+[root@c7-80-docker ~]# nano Dockerfile
+
+FROM ubuntu
+RUN echo "anuniqsTV" > /tmp/anuniqstv
+
+FROM ubuntu
+WORKDIR /tmp
+RUN echo "anuniqsTV" > /tmp/anuniqstvfile
+ENV user anuniqs
+COPY anuniqstvcp /tmp
+
+
+[root@c7-80-docker ~]# docker build -t another .
+[root@c7-80-docker ~]# docker images
+[root@c7-80-docker ~]# docker ps -a
+[root@c7-80-docker ~]# docker image rm another
+
+
+
+
+docker volume using Dockerfile,
+
+[root@c7-80-docker ~]# nano Dockerfile 
+
+FROM ubuntu
+VOLUME ["shared-volume"]
+
+[root@c7-80-docker ~]# docker build -t shared-volume .
+[root@c7-80-docker ~]# docker images
+
+
+[root@c7-80-docker ~]# docker run -it --name container-ek shared-volume /bin/bash
+root@d310ef6c7f2c:/# ls -ltr
+
+
+[root@c7-80-docker ~]# docker run -it --name container-dui --privileged=true --volumes-from container-ek ubuntu /bin/bash
+root@adf8f88c5ee0:/# ls -ltr
+
+
+
+
+
+docker volume without using Dockerfile,
+
+[root@c7-80-docker ~]# docker run -it --name container-tin -v /second-volume ubuntu /bin/bash
+root@6f26bbba8b24:/# ls -ltr
+root@6f26bbba8b24:/second-volume#
+
+
+[root@c7-80-docker ~]# docker run -it --name container-char --privileged=true --volumes-from container-tin ubuntu /bin/bash                       
+
+
+[root@c7-80-docker ~]# docker run -it --name container-panch --privileged=true --volumes-from container-char ubuntu /bin/bash
+
+
+
+
+Host to container,
+
+[root@c7-80-docker ~]# docker run -it --name hosttocontainer -v /home/anup:/home/volume --privileged=true ubuntu /bin/bash
+
+
+
+
+
+
+Docker File
+Docker Compose
+Docker Swarm
+Docker Kubernetes
+
+
+
+
+Network,
+docker0: Interface
+inet 172.17.0.1, defaut gateway
+inet addr:172.17.0.2
+
+[anup@c9-80-docker ~]$ docker network ls
+[anup@c9-80-docker ~]$ docker network create learning
+
+
+
+Port mapping,
+[root@c9-80-docker ~]# docker image pull nginx
+[root@c9-80-docker ~]# docker run -d -p 80:80 nginx 
+[root@c9-80-docker ~]# docker run -d -p Host_port:Container_port nginx 
+
+
+
+Environment variable set,
+[root@c9-80-docker ~]# docker run -d -it node:alpine
+[root@c9-80-docker ~]# docker run -d -it -e MY_TEST=nodealpine node:alpine
+[root@c9-80-docker ~]# docker exec -it 63cf8d7d76ac sh
+
+
+
+Docker volume, volume mapping,
+[root@c9-80-docker html]# docker run -it -d -p 80:80 -v /home/anup/nginx/html/:/usr/share/nginx/html nginx
+
+
+Dokcer files,
+[anup@c9-80-docker docker-files]$ nano Dockerfile
+[anup@c9-80-docker docker-files]$ docker build -t hello .
+[anup@c9-80-docker docker-files]$ docker build -t nanoer .
+
+
+
+Docker Compose,
+https://github.com/docker/compose/releases/
+[root@c9-80-docker ~]# curl -L "https://github.com/docker/compose/releases/download/1.27.4/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+[root@c9-80-docker ~]# chmod +x /usr/local/bin/docker-compose
+[root@c9-80-docker ~]# docker-compose version
+
+
+
+
+
+
+
+
+
+
